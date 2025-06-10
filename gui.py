@@ -66,29 +66,48 @@ class ImageEditor(QWidget):
     def open_image(self):
         file_path, _ = QFileDialog.getOpenFileName(self, "Abrir Imagem", "", "Imagens (*.png *.jpg *.bmp)")
         if file_path:
-            self.image = cv2.imread(file_path)
-            if self.image is None:
+            # Carregar imagem (em BGR)
+            image_bgr = cv2.imread(file_path)
+            if image_bgr is None:
                 QMessageBox.critical(self, "Erro", "Não foi possível carregar a imagem.")
                 return
-            self.display_image(self.image)
+
+            # Converter para tons de cinza
+            self.image_gray = cv2.cvtColor(image_bgr, cv2.COLOR_BGR2GRAY)
+
+            # Exibir a imagem em tons de cinza
+            self.display_image(self.image_gray)
+
+            # Ativar botão de salvar
             self.btn_save.setEnabled(True)
 
+
+
     def save_image(self):
-        if self.image is not None:
+        if self.image_gray is not None:
             file_path, _ = QFileDialog.getSaveFileName(self, "Salvar Imagem", "", "PNG (*.png);;JPG (*.jpg)")
             if file_path:
-                cv2.imwrite(file_path, self.image)
+                cv2.imwrite(file_path, self.image_gray)
                 QMessageBox.information(self, "Imagem Salva", "Imagem salva com sucesso!")
 
+
     def display_image(self, img):
-        rgb_image = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-        h, w, ch = rgb_image.shape
-        bytes_per_line = ch * w
-        qt_image = QImage(rgb_image.data, w, h, bytes_per_line, QImage.Format_RGB888)
+        """Exibe imagem no QLabel — suporta RGB e grayscale"""
+        if len(img.shape) == 2:  # Grayscale
+            h, w = img.shape
+            bytes_per_line = w
+            qt_image = QImage(img.data, w, h, bytes_per_line, QImage.Format_Grayscale8)
+        else:  # RGB
+            rgb_image = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+            h, w, ch = rgb_image.shape
+            bytes_per_line = ch * w
+            qt_image = QImage(rgb_image.data, w, h, bytes_per_line, QImage.Format_RGB888)
+
         pixmap = QPixmap.fromImage(qt_image)
         self.image_label.setPixmap(pixmap.scaled(
             self.image_label.size(), Qt.KeepAspectRatio, Qt.SmoothTransformation
         ))
+
 
     # Ações placeholders (por enquanto só mensagens)
     def histogram_action(self):
