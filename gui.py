@@ -7,13 +7,16 @@ from PyQt5.QtWidgets import (
 from PyQt5.QtGui import QPixmap, QImage
 from PyQt5.QtCore import Qt
 
+from image_processing.histogram import exibir_histograma
+
+
 class ImageEditor(QWidget):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Editor de Imagens - SIN392")
         self.setGeometry(100, 100, 1000, 700)
 
-        self.image = None
+        self.image_gray = None  # Adicionado para evitar erro
         self.image_label = QLabel("Nenhuma imagem carregada")
         self.image_label.setAlignment(Qt.AlignCenter)
         self.image_label.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
@@ -81,6 +84,12 @@ class ImageEditor(QWidget):
             # Ativar botão de salvar
             self.btn_save.setEnabled(True)
 
+    def verificar_imagem(self):
+        """Verifica se há imagem carregada e retorna booleano"""
+        if self.image_gray is None:
+            QMessageBox.warning(self, "Aviso", "Nenhuma imagem foi carregada.")
+            return False
+        return True
 
 
     def save_image(self):
@@ -111,7 +120,9 @@ class ImageEditor(QWidget):
 
     # Ações placeholders (por enquanto só mensagens)
     def histogram_action(self):
-        QMessageBox.information(self, "Histograma", "Função de histograma será implementada.")
+        if not self.verificar_imagem():
+            return
+        exibir_histograma(self.image_gray)
 
     def contrast_action(self):
         QMessageBox.information(self, "Contraste", "Função de alargamento de contraste será implementada.")
