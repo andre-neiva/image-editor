@@ -1,5 +1,6 @@
 from PyQt5.QtWidgets import QApplication
-from gui import ImageEditor
+# Update the import path if 'image_editor.py' is in the same directory as main.py
+from gui.image_editor import ImageEditor
 import sys
 
 if __name__ == "__main__":
