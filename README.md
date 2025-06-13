@@ -58,17 +58,17 @@ O sistema permite o carregamento de imagens, aplicação de diversos filtros e t
    cd sin392-image-editor
 
 2. Crie e ative o ambiente virtual:
-
+     ```bash
     python -m venv venv
     venv\Scripts\activate  # Windows
     source venv/bin/activate  # Linux/macOS
 
 3. Instale as dependências
-
+    ```bash
     pip install -r requirements.txt
 
 4. Execute a aplicação
-
+    ```bash
     python main.py
 
 
