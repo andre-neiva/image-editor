@@ -4,6 +4,8 @@ Este é um editor de imagens desenvolvido como parte do projeto da disciplina **
 
 O sistema permite o carregamento de imagens, aplicação de diversos filtros e transformações, e visualização de resultados em tempo real.
 
+Link Youtube: https://youtu.be/IfYF_GMAANE
+
 ## Tecnologias utilizadas
 - Python 3.10+
 - PyQt5
